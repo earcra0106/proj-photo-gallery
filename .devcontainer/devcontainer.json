@@ -8,18 +8,18 @@
   // コンテナ内での作業ディレクトリを指定
   "workspaceFolder": "/workspaces/${localWorkspaceFolderBasename}",
 
-  // "mounts": [
-  //   {
-  //     "source": "frontend_node_modules",
-  //     "target": "/workspaces/${localWorkspaceFolderBasename}/frontend/node_modules",
-  //     "type": "volume"
-  //   },
-  //   {
-  //     "source": "backend_node_modules",
-  //     "target": "/workspaces/${localWorkspaceFolderBasename}/backend/node_modules",
-  //     "type": "volume"
-  //   }
-  // ],
+  "mounts": [
+    //   {
+    //     "source": "frontend_node_modules",
+    //     "target": "/workspaces/${localWorkspaceFolderBasename}/frontend/node_modules",
+    //     "type": "volume"
+    //   },
+    {
+      "source": "backend_node_modules",
+      "target": "/workspaces/${localWorkspaceFolderBasename}/backend/node_modules",
+      "type": "volume"
+    }
+  ],
 
   // コンテナ作成後に実行するコマンドを指定
   "postCreateCommand": "chmod +x ./.devcontainer/post-create.sh &&./.devcontainer/post-create.sh",

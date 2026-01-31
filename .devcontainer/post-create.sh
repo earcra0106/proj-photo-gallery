@@ -8,8 +8,11 @@ echo "devcontainerのセットアップを開始します..."
 echo "${BGRED} - 環境変数を追加する処理があります。          - ${ESC}[m"
 echo "${BGRED} - 実行終了まではbashを立ち上げないでください。 - ${ESC}[m"
 
+# echo "${BIGREEN}\$sudo chown -R node:node /workspaces/$LOCAL_WORKSPACE_FOLDER_BASENAME/frontend/node_modules${ESC}[m"
 # sudo chown -R node:node /workspaces/$LOCAL_WORKSPACE_FOLDER_BASENAME/frontend/node_modules
-# sudo chown -R node:node /workspaces/$LOCAL_WORKSPACE_FOLDER_BASENAME/backend/node_modules
+
+echo "${BIGREEN}\$sudo chown -R node:node /workspaces/$LOCAL_WORKSPACE_FOLDER_BASENAME/backend/node_modules${ESC}[m"
+sudo chown -R node:node /workspaces/$LOCAL_WORKSPACE_FOLDER_BASENAME/backend/node_modules
 
 echo "${BIGREEN}\$sudo npm install --global pnpm${ESC}[m"
 sudo npm install --global pnpm
