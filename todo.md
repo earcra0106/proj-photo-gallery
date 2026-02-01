@@ -1,0 +1,20 @@
+- devcontainerの環境構築完了
+- 次はnestJS + Next.js + Prisma の環境構築から
+
+- [ ] nest -> prisma -> nextの順番で行く
+  - [ ] nest環境構築
+    - [x] インストール
+    - [x] Volume Trick
+    - [ ] モノレポ対応
+      - [ ] yarn workspaceについて調べる
+      - [ ] TSのバージョンをそろえる方法について調べる
+    - [ ] ESM対応
+    - [ ] ポート番号変更
+    - [ ] prod開発
+      - [ ] .envファイルをどのように作用させるか調べる
+  - [ ] prisma環境構築
+  - [ ] next環境構築
+- [x] dbはpostgresのままでいいのか調べる
+  - [x] もっと楽orやりやすい手段？
+  - supabaseを採用するならnestJSの役割と分離して考える必要がある
+  - どちらにしろローカルはPSQLでいい
