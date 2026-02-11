@@ -16,7 +16,7 @@
     //   },
     {
       "source": "backend_node_modules",
-      "target": "/workspaces/${localWorkspaceFolderBasename}/backend/node_modules",
+      "target": "/workspaces/${localWorkspaceFolderBasename}/app/backend/node_modules",
       "type": "volume"
     }
   ],
