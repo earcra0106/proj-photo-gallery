@@ -11,6 +11,8 @@
       - turboを利用してパッケージをプロジェクトルートから一元管理する
       - [ ] turbo整備
     - [ ] ESM対応
+      - [x] apps/backend/tsconfig.jsonのmoduleをnodenextに設定する
+        - もともとそうなってた
     - [ ] ポート番号変更
     - [ ] prod開発
       - [ ] .envファイルをどのように作用させるか調べる
