@@ -8,24 +8,21 @@ echo "devcontainerのセットアップを開始します..."
 echo "${BGRED} - 環境変数を追加する処理があります。          - ${ESC}[m"
 echo "${BGRED} - 実行終了まではbashを立ち上げないでください。 - ${ESC}[m"
 
-# echo "${BIGREEN}\$sudo chown -R node:node /workspaces/$LOCAL_WORKSPACE_FOLDER_BASENAME/frontend/node_modules${ESC}[m"
-# sudo chown -R node:node /workspaces/$LOCAL_WORKSPACE_FOLDER_BASENAME/frontend/node_modules
+# シェルをbashに設定
+export SHELL="/bin/bash"
 
-echo "${BIGREEN}\$sudo chown -R node:node /workspaces/$LOCAL_WORKSPACE_FOLDER_BASENAME/backend/node_modules${ESC}[m"
-sudo chown -R node:node /workspaces/$LOCAL_WORKSPACE_FOLDER_BASENAME/backend/node_modules
+# pnpmのインストール
+echo "${BIGREEN}\$sudo npm install --global pnpm@${PNPM_VERSION}${ESC}[m"
+sudo npm install --global pnpm@${PNPM_VERSION}
 
-echo "${BIGREEN}\$sudo npm install --global pnpm${ESC}[m"
-sudo npm install --global pnpm
-
+# pnpmのキャッシュディレクトリをワークスペース内に変更
 echo "${BIGREEN}\$pnpm config set store-dir /workspaces/.pnpm-store${ESC}[m"
 pnpm config set store-dir /workspaces/.pnpm-store
 
-export SHELL="/bin/bash"
 echo "${BIGREEN}\$pnpm setup${ESC}[m"
 pnpm setup
 
-# .bashrcは対話型シェルでないと内部処理が行われないため、setupで.bashrcに追加される行を直接実行する
-# 本来はsetup実行前後の差分をちゃんととってきたほうがいいけどとりあえずベタ書き
+# pnpmのパスを通す
 export PNPM_HOME="/home/node/.local/share/pnpm"
 case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
@@ -37,3 +34,4 @@ echo "${BIGREEN}\$pnpm add -g @nestjs/cli${ESC}[m"
 pnpm add -g @nestjs/cli
 
 echo "devcontainerのセットアップが完了しました。"
+echo "一度このターミナルを閉じて、新しいターミナルを開いてください。"

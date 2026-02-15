@@ -12,9 +12,10 @@ services:
         consistency: cached
     environment:
       TZ: ${TZ}
+      PNPM_VERSION: ${PNPM_VERSION}
     ports:
-      - "${FRONTEND_PORT}:${FRONTEND_PORT}" # Frontend
-      - "${BACKEND_PORT}:${BACKEND_PORT}" # Backend
+      - "${FRONTEND_PORT}:3000"
+      - "${BACKEND_PORT}:8000"
     command: sleep infinity
     tty: true
   db:
@@ -30,10 +31,8 @@ services:
       POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
       TZ: ${TZ}
     ports:
-      - "${POSTGRES_PORT}:${POSTGRES_PORT}"
+      - "${POSTGRES_PORT}:5432"
     restart: always
 
 volumes:
-  frontend_node_modules: {}
-  backend_node_modules: {}
   db_data: {}

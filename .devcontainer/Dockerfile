@@ -6,6 +6,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 RUN apt update && apt install -y \
     vim \
+    tree \
     sudo && \
     apt clean && \
     rm -rf /var/lib/apt/lists/*
