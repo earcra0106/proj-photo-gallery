@@ -13,7 +13,10 @@
     - [ ] ESM対応
       - [x] apps/backend/tsconfig.jsonのmoduleをnodenextに設定する
         - もともとそうなってた
-    - [ ] ポート番号変更
+    - [x] ポート番号変更
+      - [x] process.envをそのまま使って不都合がないか調べる
+      - @nestjs/configを利用
+      - backendポートを8000とする
     - [ ] prod開発
       - [ ] .envファイルをどのように作用させるか調べる
   - [ ] prisma環境構築
