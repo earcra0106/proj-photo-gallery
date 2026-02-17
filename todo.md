@@ -9,7 +9,7 @@
       - [x] yarn workspaceについて調べる
       - [x] TSのバージョンをそろえる方法について調べる
       - turboを利用してパッケージをプロジェクトルートから一元管理する
-      - [ ] turbo整備
+      - [x] turbo整備
     - [ ] ESM対応
       - [x] apps/backend/tsconfig.jsonのmoduleをnodenextに設定する
         - もともとそうなってた
