@@ -1,5 +1,10 @@
-import { prisma } from "../prisma.js";
+import { createPrismaClient } from "../prisma.js";
+import { config } from "dotenv";
+
+config();
+
 async function main() {
+  const prisma = createPrismaClient(process.env.DATABASE_URL ?? "");
   await prisma.post.deleteMany();
   await prisma.user.deleteMany();
 
@@ -40,14 +45,13 @@ async function main() {
       },
     },
   });
-  console.log({ alice, bob });
+  console.log("seedが完了しました");
+  console.log("user count: ", await prisma.user.count());
+  console.log("post count: ", await prisma.post.count());
+
+  prisma.$disconnect();
 }
-main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
