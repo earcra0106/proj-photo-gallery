@@ -1,13 +1,18 @@
-import { config } from "dotenv";
-import path from "path";
 import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "./generated/client.js";
 
-config({ path: path.resolve(__dirname, "./.env") });
+/**
+ * Prismaクライアントを作成する関数
+ * @param connectionString データベース接続文字列
+ * @return PrismaClientのインスタンス
+ */
+export function createPrismaClient(connectionString: string) {
+  if (!connectionString) {
+    throw new Error("DATABASE_URL is required");
+  }
 
-const connectionString = process.env.DATABASE_URL;
+  const adapter = new PrismaPg({ connectionString });
+  return new PrismaClient({ adapter });
+}
 
-const adapter = new PrismaPg({ connectionString });
-const prisma = new PrismaClient({ adapter });
-
-export { prisma };
+export type { PrismaClient };

@@ -4,6 +4,29 @@
     "dev": {
       "persistent": true,
       "cache": false
+    },
+    "seed": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "migrate": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "build": {
+      "inputs": ["$TURBO_DEFAULT$"],
+      "outputs": ["dist/**", ".next/**"],
+      "cache": true
+    },
+    "start": {
+      "dependsOn": ["build"],
+      "cache": false
+    },
+    "backend#build": {
+      "dependsOn": ["@repo/prisma#build"]
+    },
+    "backend#dev": {
+      "dependsOn": ["@repo/prisma#build"]
     }
   }
 }
