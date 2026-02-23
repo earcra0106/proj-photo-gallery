@@ -1,0 +1,34 @@
+{
+  "name": "@repo/prisma",
+  "version": "1.0.0",
+  "main": "dist/prisma.js",
+  "types": "dist/prisma.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/prisma.d.ts",
+      "default": "./dist/prisma.js"
+    }
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "build": "tsc",
+    "lint": "prisma format && prisma validate",
+    "dev": "tsc --watch",
+    "migrate": "prisma migrate dev",
+    "generate": "prisma generate",
+    "seed": "tsx prisma/seed.ts",
+    "studio": "prisma studio"
+  },
+  "devDependencies": {
+    "@prisma/client": "^7.4.1",
+    "@types/node": "^22.19.11",
+    "prisma": "^7.4.1",
+    "tsx": "^4.21.0",
+    "typescript": "^5.9.3"
+  },
+  "dependencies": {
+    "@prisma/adapter-pg": "^7.4.1",
+    "argon2": "^0.44.0",
+    "dotenv": "^17.3.1"
+  }
+}
