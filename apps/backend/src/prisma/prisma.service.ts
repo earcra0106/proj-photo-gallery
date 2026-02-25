@@ -1,7 +1,12 @@
-import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import {
+  Injectable,
+  OnModuleInit,
+  OnModuleDestroy,
+  Inject,
+} from '@nestjs/common';
 import { createPrismaClient } from '@repo/prisma';
 import type { PrismaClient } from '@repo/prisma';
+import { AppConfigService } from '../config/config.service';
 
 /**
  * prismaの初期接続を行う
@@ -12,19 +17,13 @@ import type { PrismaClient } from '@repo/prisma';
 export class PrismaService implements OnModuleInit, OnModuleDestroy {
   private prismaClient: PrismaClient;
 
-  constructor(private configService: ConfigService) {}
+  constructor(@Inject(AppConfigService) private config: AppConfigService) {}
 
   /**
    * モジュール初期化時にPrismaクライアントを作成し、データベースに接続する
-   * DATABASE_URL環境変数が設定されていない場合はエラーをスローする
    */
   async onModuleInit() {
-    const databaseUrl = this.configService.get<string>('DATABASE_URL');
-    if (!databaseUrl || typeof databaseUrl !== 'string') {
-      throw new Error(
-        'DATABASE_URL environment variable is not set or invalid',
-      );
-    }
+    const databaseUrl = this.config.databaseUrl;
     this.prismaClient = createPrismaClient(databaseUrl);
     await this.prismaClient.$connect();
   }
