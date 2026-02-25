@@ -1,43 +1,40 @@
-import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import type { AppConfig } from './configuration';
+import { Injectable, Inject } from '@nestjs/common';
+import type { ConfigType } from '@nestjs/config';
+import * as ConfigRegister from 'config/config.register';
 
 /**
  * 型安全な設定サービス
  */
 @Injectable()
 export class AppConfigService {
-  constructor(private configService: ConfigService<AppConfig, true>) {}
+  constructor(
+    @Inject(ConfigRegister.serverConfig.KEY)
+    private serverConfig: ConfigType<typeof ConfigRegister.serverConfig>,
+    @Inject(ConfigRegister.databaseConfig.KEY)
+    private databaseConfig: ConfigType<typeof ConfigRegister.databaseConfig>,
+  ) {}
 
   /**
-   * サーバーのポート番号を取得
+   * サーバーのポート番号
    */
   get port(): number {
-    return this.configService.get('PORT', { infer: true });
+    return this.serverConfig.port;
   }
 
   /**
-   * 実行環境を取得
+   * 実行環境
    */
   get nodeEnv(): 'development' | 'production' | 'test' {
-    return this.configService.get('NODE_ENV', { infer: true });
+    return this.serverConfig.nodeEnv;
   }
 
   /**
-   * データベース接続URLを取得
+   * データベース接続URL
    */
   get databaseUrl(): string {
-    const username = this.configService.get('DATABASE_USERNAME', {
-      infer: true,
-    });
-    const password = this.configService.get('DATABASE_PASSWORD', {
-      infer: true,
-    });
-    const host = this.configService.get('DATABASE_HOST', { infer: true });
-    const port = this.configService.get('DATABASE_PORT', { infer: true });
-    const database = this.configService.get('DATABASE_NAME', { infer: true });
+    const { username, password, host, port, dbname } = this.databaseConfig;
 
-    return `postgresql://${username}:${password}@${host}:${port}/${database}`;
+    return `postgresql://${username}:${password}@${host}:${port}/${dbname}`;
   }
 
   /**
