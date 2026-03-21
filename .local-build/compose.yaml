@@ -1,0 +1,60 @@
+services:
+  proxy:
+    build:
+      context: ..
+      dockerfile: ./.local-build/proxy/Dockerfile
+    ports:
+      - "${WEB_HOST_PORT:-8080}:8080"
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+  # frontend:
+  #   build:
+  #     context: .
+  #     dockerfile: ./frontend/Dockerfile
+  #     args:
+  #       NODE_VERSION: ${NODE_VERSION}
+  backend:
+    build:
+      context: ..
+      dockerfile: ./.local-build/backend/Dockerfile
+      args:
+        NODE_VERSION: ${NODE_VERSION}
+        PNPM_VERSION: ${PNPM_VERSION}
+    environment:
+      PORT: 3000
+      DATABASE_USERNAME: ${DATABASE_USERNAME}
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD}
+      DATABASE_HOST: ${DATABASE_HOST}
+      DATABASE_PORT: ${DATABASE_PORT}
+      DATABASE_NAME: ${DATABASE_NAME}
+      DATABASE_URL: postgresql://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+      NODE_ENV: ${NODE_ENV}
+      ENABLE_DB_SEED: ${ENABLE_DB_SEED:-false}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+  db:
+    image: postgres:16.11
+    volumes:
+      - type: volume
+        source: db_data
+        target: /var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${DATABASE_USERNAME}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_INITDB_ARGS: "--encoding=UTF-8"
+      TZ: ${TZ}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME} -d ${DATABASE_NAME}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    restart: always
+
+volumes:
+  db_data: {}

@@ -2,7 +2,7 @@
 - 次はnestJS + Next.js + Prisma の環境構築から
 
 - [ ] nest -> prisma -> nextの順番で行く
-  - [ ] nest環境構築
+  - [x] nest環境構築
     - [x] インストール
     - [x] Volume Trick
     - [x] モノレポ対応
@@ -17,8 +17,8 @@
       - [x] process.envをそのまま使って不都合がないか調べる
       - @nestjs/configを利用
       - backendポートを8000とする
-    - [ ] prod開発
-      - 保留
+    - [x] prod開発
+      - ローカルビルド環境整備済
     - [x] .envファイルをどのように読み込むか調べる
       - 独自のconfigサービスの定義
     - テスト作成
