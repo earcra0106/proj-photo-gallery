@@ -13,11 +13,13 @@ RUN corepack enable && corepack prepare pnpm@${PNPM_VERSION} --activate
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY apps/backend/package.json ./apps/backend/package.json
 COPY packages/prisma/package.json ./packages/prisma/package.json
+COPY packages/typescript/package.json ./packages/typescript/package.json
 
 RUN pnpm install --frozen-lockfile
 
 COPY apps/backend ./apps/backend
 COPY packages/prisma ./packages/prisma
+COPY packages/typescript ./packages/typescript
 COPY .local-build/backend/entrypoint.sh ./entrypoint.sh
 
 RUN pnpm --filter ./packages/prisma... build

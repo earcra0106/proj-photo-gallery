@@ -14,12 +14,14 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
 COPY apps/frontend/package.json ./apps/frontend/package.json
 COPY packages/eslint-config/package.json ./packages/eslint-config/package.json
 COPY packages/prettier-config/package.json ./packages/prettier-config/package.json
+COPY packages/typescript/package.json ./packages/typescript/package.json
 
 RUN pnpm install --frozen-lockfile --filter ./apps/frontend...
 
 COPY apps/frontend ./apps/frontend
 COPY packages/eslint-config ./packages/eslint-config
 COPY packages/prettier-config ./packages/prettier-config
+COPY packages/typescript ./packages/typescript
 
 ARG NEXT_PUBLIC_API_URL=/api
 ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
