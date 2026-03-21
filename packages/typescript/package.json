@@ -1,0 +1,13 @@
+{
+  "name": "@repo/typescript-config",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    "./backend": "./tsconfig.backend.json"
+  },
+  "scripts": {},
+  "devDependencies": {},
+  "dependencies": {
+    "typescript": "^5.9.3"
+  }
+}
