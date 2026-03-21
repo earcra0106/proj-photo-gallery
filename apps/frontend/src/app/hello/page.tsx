@@ -1,10 +1,10 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from "react";
-import { fetchUsers } from "@/fetcher/users";
+import { useEffect, useState } from 'react';
+import { fetchUsers } from '@/fetcher/users';
 
 export default function HelloPage() {
-  const [users, setUsers] = useState<string>("");
+  const [users, setUsers] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -16,10 +16,10 @@ export default function HelloPage() {
         setError(null);
       } catch (err) {
         const errorMessage =
-          err instanceof Error ? err.message : "Failed to fetch users";
+          err instanceof Error ? err.message : 'Failed to fetch users';
         setError(errorMessage);
-        setUsers("");
-        console.error("Error loading users:", err);
+        setUsers('');
+        console.error('Error loading users:', err);
       } finally {
         setLoading(false);
       }

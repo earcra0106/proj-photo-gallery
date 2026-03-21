@@ -5,6 +5,14 @@
       "persistent": true,
       "cache": false
     },
+    "lint": {
+      "inputs": ["src/**/*.ts", "src/**/*.tsx", "eslint.config.mjs"],
+      "cache": false
+    },
+    "format": {
+      "inputs": ["src/**", "prettier.config.mjs"],
+      "cache": false
+    },
     "seed": {
       "dependsOn": ["build"],
       "cache": false
@@ -26,7 +34,11 @@
       "dependsOn": ["@repo/prisma#build"]
     },
     "backend#dev": {
-      "dependsOn": ["@repo/prisma#build"]
+      "dependsOn": ["@repo/prisma#build"],
+      "cache": false
+    },
+    "frontend#dev": {
+      "cache": false
     }
   }
 }

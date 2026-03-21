@@ -1,0 +1,16 @@
+{
+  "name": "@repo/prettier",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {
+    "./common": "./common.mjs",
+    "./backend": "./backend.mjs",
+    "./frontend": "./frontend.mjs"
+  },
+  "scripts": {},
+  "devDependencies": {},
+  "dependencies": {},
+  "peerDependencies": {
+    "prettier": "^3"
+  }
+}

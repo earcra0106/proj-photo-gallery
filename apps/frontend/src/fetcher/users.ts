@@ -20,9 +20,9 @@ export interface User {
 export async function fetchUsers(): Promise<string> {
   try {
     const response = await fetch(`${API_BASE_URL}/`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
@@ -34,8 +34,8 @@ export async function fetchUsers(): Promise<string> {
     return data;
   } catch (error) {
     const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-    console.error("Failed to fetch users:", errorMessage);
+      error instanceof Error ? error.message : 'Unknown error';
+    console.error('Failed to fetch users:', errorMessage);
     throw error;
   }
 }
@@ -47,9 +47,9 @@ export async function fetchUsers(): Promise<string> {
 export async function fetchUsersAsJson(): Promise<User[]> {
   try {
     const response = await fetch(`${API_BASE_URL}/users`, {
-      method: "GET",
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
@@ -61,8 +61,8 @@ export async function fetchUsersAsJson(): Promise<User[]> {
     return data;
   } catch (error) {
     const errorMessage =
-      error instanceof Error ? error.message : "Unknown error";
-    console.error("Failed to fetch users as JSON:", errorMessage);
+      error instanceof Error ? error.message : 'Unknown error';
+    console.error('Failed to fetch users as JSON:', errorMessage);
     throw error;
   }
 }
