@@ -1,3 +1,3 @@
-import backendEslintConfig from '@repo/eslint/backend';
+import backendEslintConfig from '@repo/eslint-config/backend';
 
 export default backendEslintConfig;

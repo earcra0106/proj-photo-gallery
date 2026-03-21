@@ -1,5 +1,5 @@
 {
-  "name": "@repo/eslint",
+  "name": "@repo/eslint-config",
   "version": "1.0.0",
   "type": "module",
   "exports": {

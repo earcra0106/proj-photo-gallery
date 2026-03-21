@@ -1,5 +1,5 @@
-import commonPrettierConfig from '@repo/prettier/common';
-import backendPrettierConfig from '@repo/prettier/backend';
+import commonPrettierConfig from '@repo/prettier-config/common';
+import backendPrettierConfig from '@repo/prettier-config/backend';
 
 const prettierConfig = {
   ...commonPrettierConfig,
