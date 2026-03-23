@@ -19,6 +19,11 @@
       - backendポートを8000とする
     - [x] prod開発
       - ローカルビルド環境整備済
+      - マルチステージビルド構築
+        - [x] backendビルド後migrate実行時にprisma.configが認識されずDATRABASE URLが渡されない問題の解決
+          - マルチステージビルドでソースファイルをビルドに含めないようにしたため、prisma.configが認識されなかった
+          - そもそもprismaはdevDependenciesに置いていたため、prisma migrateは当然動かなかった
+          - マイグレーション専用のコンテナを作成して解決
     - [x] .envファイルをどのように読み込むか調べる
       - 独自のconfigサービスの定義
     - テスト作成

@@ -13,6 +13,9 @@
       "inputs": ["src/**", "prettier.config.mjs"],
       "cache": false
     },
+    "generate": {
+      "cache": false
+    },
     "seed": {
       "dependsOn": ["build"],
       "cache": false
@@ -39,6 +42,11 @@
     },
     "frontend#dev": {
       "cache": false
+    },
+    "@repo/prisma#build": {
+      "dependsOn": ["@repo/prisma#generate"],
+      "outputs": ["dist/**"],
+      "cache": true
     }
   }
 }

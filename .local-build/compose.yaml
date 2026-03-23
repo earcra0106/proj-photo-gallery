@@ -20,7 +20,7 @@ services:
         PNPM_VERSION: ${PNPM_VERSION}
         NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-/api}
     environment:
-      NODE_ENV: production
+      NODE_ENV: ${NODE_ENV}
       PORT: 3000
     depends_on:
       backend:
@@ -40,9 +40,24 @@ services:
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_PORT: ${DATABASE_PORT}
       DATABASE_NAME: ${DATABASE_NAME}
-      DATABASE_URL: postgresql://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
       NODE_ENV: ${NODE_ENV}
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: unless-stopped
+  prisma:
+    build:
+      context: ..
+      dockerfile: ./.local-build/prisma/Dockerfile
+      args:
+        NODE_VERSION: ${NODE_VERSION}
+        PNPM_VERSION: ${PNPM_VERSION}
+    environment:
+      DATABASE_URL: postgresql://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
       ENABLE_DB_SEED: ${ENABLE_DB_SEED:-false}
+      NODE_ENV: ${NODE_ENV}
+    ports:
+      - "5555:5555"
     depends_on:
       db:
         condition: service_healthy

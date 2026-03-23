@@ -5,6 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "turbo run dev",
+    "generate": "turbo run generate --filter=@repo/prisma",
     "seed": "turbo run seed --filter=@repo/prisma",
     "migrate": "turbo run migrate --filter=@repo/prisma",
     "build": "turbo run build",
