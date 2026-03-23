@@ -31,7 +31,7 @@ COPY packages/prisma ./packages/prisma
 COPY packages/typescript ./packages/typescript
 
 # ソースコードをビルド
-RUN pnpm --filter ./apps/backend build
+RUN pnpm --filter backend build
 
 # ビルド成果物の存在確認
 RUN test -n "$(find ./apps/backend/dist -type f -name main.js | head -n 1)"

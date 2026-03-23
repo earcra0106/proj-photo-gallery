@@ -10,7 +10,7 @@ services:
         condition: service_started
       frontend:
         condition: service_started
-    restart: unless-stopped
+    restart: on-failure
   frontend:
     build:
       context: ..
@@ -22,10 +22,7 @@ services:
     environment:
       NODE_ENV: ${NODE_ENV}
       PORT: 3000
-    depends_on:
-      backend:
-        condition: service_started
-    restart: unless-stopped
+    restart: on-failure
   backend:
     build:
       context: ..
@@ -41,10 +38,7 @@ services:
       DATABASE_PORT: ${DATABASE_PORT}
       DATABASE_NAME: ${DATABASE_NAME}
       NODE_ENV: ${NODE_ENV}
-    depends_on:
-      db:
-        condition: service_healthy
-    restart: unless-stopped
+    restart: on-failure
   prisma:
     build:
       context: ..
@@ -55,13 +49,14 @@ services:
     environment:
       DATABASE_URL: postgresql://${DATABASE_USERNAME}:${DATABASE_PASSWORD}@${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
       ENABLE_DB_SEED: ${ENABLE_DB_SEED:-false}
+      ENABLE_PRISMA_STUDIO: ${ENABLE_PRISMA_STUDIO:-false}
       NODE_ENV: ${NODE_ENV}
     ports:
-      - "5555:5555"
+      - "${PRISMA_STUDIO_HOST_PORT:-5555}:5555"
     depends_on:
       db:
         condition: service_healthy
-    restart: unless-stopped
+    restart: no
   db:
     image: postgres:16.11
     volumes:
@@ -76,11 +71,11 @@ services:
       TZ: ${TZ}
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${DATABASE_USERNAME} -d ${DATABASE_NAME}"]
-      interval: 5s
-      timeout: 5s
+      interval: 30s
+      timeout: 10s
       retries: 10
-      start_period: 10s
-    restart: always
+      start_period: 5s
+    restart: on-failure
 
 volumes:
   db_data: {}
