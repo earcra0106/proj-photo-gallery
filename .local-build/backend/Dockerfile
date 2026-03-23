@@ -56,6 +56,7 @@ COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
 # ワークスペースの定義
 COPY --from=builder /app/package.json ./package.json
 COPY --from=builder /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
+COPY --from=builder /app/turbo.json ./turbo.json
 
 # ビルド済アプリ本体
 COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
