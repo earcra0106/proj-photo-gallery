@@ -1,14 +1,14 @@
-ARG NODE_VERSION=24.13.1
-ARG PNPM_VERSION=10.29.3
+ARG NODE_VERSION
+ARG PNPM_VERSION
 
 # ============================================================================
 # Stage 1: Builder
 # ============================================================================
 FROM node:${NODE_VERSION}-alpine3.22 AS builder
 
-ENV PNPM_HOME=/pnpm
-ENV PATH=${PNPM_HOME}:${PATH}
-ENV CI=true
+ARG PNPM_HOME=/pnpm
+ARG PATH=${PNPM_HOME}:${PATH}
+ARG CI=true
 
 WORKDIR /app
 
@@ -28,21 +28,23 @@ RUN pnpm install --frozen-lockfile
 COPY apps/frontend ./apps/frontend
 COPY packages/typescript ./packages/typescript
 
+# envファイルを削除 (環境変数を直接渡すため)
+RUN rm -f apps/frontend/.env*
+
+# フロントエンドのため、ビルド時に環境変数を埋め込む
+ARG NEXT_PUBLIC_API_URL
+ARG NODE_ENV
+
 # ソースコードをビルド
 RUN pnpm --filter frontend build
 
 # ============================================================================
 # Stage 2: Runtime
 # ============================================================================
-ARG NEXT_PUBLIC_API_URL=/api
+FROM node:${NODE_VERSION}-alpine3.22 as runtime
 
-FROM node:${NODE_VERSION}-alpine3.22
-
-ENV NEXT_PUBLIC_API_URL=${NEXT_PUBLIC_API_URL}
 ENV PNPM_HOME=/pnpm
 ENV PATH=${PNPM_HOME}:${PATH}
-ENV NODE_ENV=production
-
 ENV PORT=3000
 
 WORKDIR /app

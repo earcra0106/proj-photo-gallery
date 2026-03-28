@@ -43,7 +43,7 @@ FROM node:${NODE_VERSION}-alpine3.22
 
 ENV PNPM_HOME=/pnpm
 ENV PATH=${PNPM_HOME}:${PATH}
-ENV NODE_ENV=production
+ENV PORT=3000
 
 WORKDIR /app
 
