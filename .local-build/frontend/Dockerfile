@@ -2,69 +2,55 @@ ARG NODE_VERSION
 ARG PNPM_VERSION
 
 # ============================================================================
-# Stage 1: Builder
+# Base
 # ============================================================================
-FROM node:${NODE_VERSION}-alpine3.22 AS builder
+FROM node:${NODE_VERSION}-alpine3.22 AS base
 
-ARG PNPM_HOME=/pnpm
-ARG PATH=${PNPM_HOME}:${PATH}
-ARG CI=true
-
-WORKDIR /app
-
+ENV PNPM_HOME=/pnpm
+ENV PATH=${PNPM_HOME}:${PATH}
 RUN npm i -g pnpm@${PNPM_VERSION}
 
-# モノレポ定義
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
+# ============================================================================
+# Stage 1: Pruner
+# ============================================================================
+FROM base AS pruner
+WORKDIR /app
+RUN pnpm install -g turbo
 
-# アプリと依存パッケージの定義
-COPY apps/frontend/package.json ./apps/frontend/package.json
-COPY packages/typescript/package.json ./packages/typescript/package.json
+COPY . .
 
-# パッケージインストール
-RUN pnpm install --frozen-lockfile
+# ビルド済アプリと依存パッケージを抽出
+RUN turbo prune frontend --docker
 
-# ソースコード
-COPY apps/frontend ./apps/frontend
-COPY packages/typescript ./packages/typescript
+# ============================================================================
+# Stage 2: Builder
+# ============================================================================
+FROM base AS builder
+WORKDIR /app
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 
-# envファイルを削除 (環境変数を直接渡すため)
-RUN rm -f apps/frontend/.env*
+# 依存関係のインストール (docker buildのキャッシュを保存)
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+
+COPY --from=pruner /app/out/full/ .
 
 # フロントエンドのため、ビルド時に環境変数を埋め込む
 ARG NEXT_PUBLIC_API_URL
 ARG NODE_ENV
 
-# ソースコードをビルド
-RUN pnpm --filter frontend build
+RUN pnpm build
 
 # ============================================================================
-# Stage 2: Runtime
+# Stage 3: Runtime
 # ============================================================================
-FROM node:${NODE_VERSION}-alpine3.22 as runtime
-
-ENV PNPM_HOME=/pnpm
-ENV PATH=${PNPM_HOME}:${PATH}
-ENV PORT=3000
+FROM base AS runtime
 
 WORKDIR /app
 
-RUN npm i -g pnpm@${PNPM_VERSION}
-
-# ワークスペースルートの依存関係
-COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/pnpm-lock.yaml ./pnpm-lock.yaml
-
-# ワークスペースの定義
-COPY --from=builder /app/package.json ./package.json
-COPY --from=builder /app/pnpm-workspace.yaml ./pnpm-workspace.yaml
-COPY --from=builder /app/turbo.json ./turbo.json
-
-# ビルド済アプリ本体
-COPY --from=builder /app/apps/frontend/.next ./apps/frontend/.next
-COPY --from=builder /app/apps/frontend/package.json ./apps/frontend/package.json
-COPY --from=builder /app/apps/frontend/node_modules ./apps/frontend/node_modules
+# スタンドアロンモードでビルドされたNext.jsアプリをコピー
+COPY --from=builder /app/apps/frontend/.next/standalone/ ./
 
 EXPOSE 3000
 
-CMD ["pnpm", "--filter", "frontend", "start"]
+CMD ["node", "./apps/frontend/server.js"]
