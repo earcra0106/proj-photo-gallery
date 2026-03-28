@@ -29,12 +29,13 @@ services:
         NODE_VERSION: ${NODE_VERSION}
         PNPM_VERSION: ${PNPM_VERSION}
     environment:
+      NODE_ENV: ${NODE_ENV}
+      PORT: 3000
       DATABASE_USERNAME: ${DATABASE_USERNAME}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       DATABASE_HOST: ${DATABASE_HOST}
       DATABASE_PORT: ${DATABASE_PORT}
       DATABASE_NAME: ${DATABASE_NAME}
-      NODE_ENV: ${NODE_ENV}
     restart: on-failure
   prisma:
     build:
