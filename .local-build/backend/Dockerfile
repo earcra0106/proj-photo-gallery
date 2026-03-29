@@ -1,5 +1,5 @@
-ARG NODE_VERSION=24.13.1
-ARG PNPM_VERSION=10.29.3
+ARG NODE_VERSION
+ARG PNPM_VERSION
 
 # ============================================================================
 # Base
