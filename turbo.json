@@ -25,22 +25,13 @@
       "cache": false
     },
     "build": {
+      "dependsOn": ["^build"],
       "inputs": ["$TURBO_DEFAULT$"],
       "outputs": ["dist/**", ".next/**"],
       "cache": true
     },
     "start": {
       "dependsOn": ["build"],
-      "cache": false
-    },
-    "backend#build": {
-      "dependsOn": ["@repo/prisma#build"]
-    },
-    "backend#dev": {
-      "dependsOn": ["@repo/prisma#build"],
-      "cache": false
-    },
-    "frontend#dev": {
       "cache": false
     },
     "@repo/prisma#build": {

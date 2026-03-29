@@ -1,4 +1,4 @@
-import { defineConfig, env } from "prisma/config";
+import { defineConfig } from "prisma/config";
 import "dotenv/config";
 
 export default defineConfig({
@@ -8,6 +8,7 @@ export default defineConfig({
     seed: "tsx prisma/seed.ts",
   },
   datasource: {
-    url: env("DATABASE_URL"),
+    // backendのCI環境では代入されないため、値なしでも動作する
+    url: process.env.DATABASE_URL,
   },
 });

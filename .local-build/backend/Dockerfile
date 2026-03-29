@@ -13,13 +13,11 @@ RUN npm i -g pnpm@${PNPM_VERSION}
 # ============================================================================
 # Stage 1: Installer
 # ============================================================================
-FROM base AS installer
+FROM base AS pruner
 WORKDIR /app
 RUN pnpm install -g turbo
 
 COPY . .
-
-RUN find . -name "*.env*" -delete
 
 # ビルド済アプリと依存パッケージを抽出
 RUN turbo prune backend --docker
@@ -29,11 +27,13 @@ RUN turbo prune backend --docker
 # ============================================================================
 FROM base AS builder
 WORKDIR /app
-COPY --from=installer /app/out/json/ .
-COPY --from=installer /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 
+# 依存関係のインストール (docker buildのキャッシュを保存)
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
-COPY --from=installer /app/out/full/ .
+
+COPY --from=pruner /app/out/full/ .
 
 RUN pnpm build
 
@@ -44,12 +44,14 @@ FROM base AS runtime
 
 WORKDIR /app
 
-COPY --from=builder /app/ ./
+COPY --from=pruner /app/out/json/ .
+RUN pnpm install --prod --frozen-lockfile
 
-WORKDIR /app/apps/backend
+COPY --from=builder /app/apps/backend/dist/ ./apps/backend/dist
+COPY --from=builder /app/packages/prisma/dist/ ./packages/prisma/dist
+
+WORKDIR /app/apps/backend/dist
 
 EXPOSE 3000
 
-ARG CI=true
-
-CMD ["pnpm", "start:prod"]
+CMD ["node", "./src/main.js"]

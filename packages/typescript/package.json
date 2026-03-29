@@ -5,10 +5,5 @@
   "exports": {
     "./backend": "./tsconfig.backend.json",
     "./frontend": "./tsconfig.frontend.json"
-  },
-  "scripts": {},
-  "devDependencies": {},
-  "dependencies": {
-    "typescript": "^5.9.3"
   }
 }
