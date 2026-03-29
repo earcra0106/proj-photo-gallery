@@ -4,6 +4,7 @@
   "type": "module",
   "exports": {
     "./backend": "./tsconfig.backend.json",
-    "./frontend": "./tsconfig.frontend.json"
+    "./frontend": "./tsconfig.frontend.json",
+    "./prisma": "./tsconfig.prisma.json"
   }
 }
