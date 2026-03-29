@@ -1,6 +1,6 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
-import { AppConfigService } from './config/config.service';
+import { AppModule } from '@/app.module';
+import { AppConfigService } from '@/config/config.service';
 
 /**
  * サーバ起動時に最初に呼び出される関数

@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { createPrismaClient } from '@repo/prisma';
 import type { PrismaClient } from '@repo/prisma';
-import { AppConfigService } from '../config/config.service';
+import { AppConfigService } from '@/config/config.service';
 
 /**
  * prismaの初期接続を行う
@@ -15,7 +15,7 @@ import { AppConfigService } from '../config/config.service';
  */
 @Injectable()
 export class PrismaService implements OnModuleInit, OnModuleDestroy {
-  private prismaClient: PrismaClient;
+  private prismaClient!: PrismaClient;
 
   constructor(@Inject(AppConfigService) private config: AppConfigService) {}
 

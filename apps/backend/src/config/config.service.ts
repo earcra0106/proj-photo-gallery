@@ -1,6 +1,6 @@
 import { Injectable, Inject } from '@nestjs/common';
 import type { ConfigType } from '@nestjs/config';
-import * as ConfigRegister from 'config/config.register';
+import * as ConfigRegister from '@config/config.register';
 
 /**
  * 型安全な設定サービス
