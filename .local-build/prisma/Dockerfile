@@ -1,38 +1,44 @@
-ARG NODE_VERSION=24.13.1
-ARG PNPM_VERSION=10.29.3
+ARG NODE_VERSION
+ARG PNPM_VERSION
 
 # ============================================================================
-# Stage 1: Builder
+# Base
 # ============================================================================
-FROM node:${NODE_VERSION}-alpine3.22 AS builder
+FROM node:${NODE_VERSION}-alpine3.22 AS base
 
 ENV PNPM_HOME=/pnpm
 ENV PATH=${PNPM_HOME}:${PATH}
-ENV CI=true
-
-WORKDIR /app
-
 RUN npm i -g pnpm@${PNPM_VERSION}
 
-# Copy workspace files
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml turbo.json ./
+# ============================================================================
+# Stage 1: Pruner
+# ============================================================================
+FROM base AS pruner
+WORKDIR /app
+RUN pnpm install -g turbo
 
-# Copy package.json files for dependency resolution
-COPY packages/prisma/package.json ./packages/prisma/package.json
+COPY . .
 
-# Install all dependencies (including devDependencies for build)
-RUN pnpm install --frozen-lockfile
+# ビルド済アプリと依存パッケージを抽出
+RUN turbo prune @repo/prisma --docker
 
-# Copy source code
-COPY packages/prisma ./packages/prisma
+# ============================================================================
+# Stage 2: Builder
+# ============================================================================
+FROM base AS builder
+WORKDIR /app
+COPY --from=pruner /app/out/json/ .
+COPY --from=pruner /app/out/pnpm-lock.yaml ./pnpm-lock.yaml
 
-# Build packages (prisma first due to dependency in turbo.json)
-RUN pnpm --filter @repo/prisma build
+# 依存関係のインストール (docker buildのキャッシュを保存)
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
-# Copy entrypoint script
+COPY --from=pruner /app/out/full/ .
+
+# エントリポイントをコピー
 COPY .local-build/prisma/entrypoint.sh ./entrypoint.sh
 RUN chmod +x ./entrypoint.sh
 
-EXPOSE 3000
+EXPOSE 5555
 
 CMD ["./entrypoint.sh"]
