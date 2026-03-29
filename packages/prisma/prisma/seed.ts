@@ -1,4 +1,4 @@
-import { createPrismaClient } from "../prisma.js";
+import { createPrismaClient } from "../prisma";
 import { config } from "dotenv";
 
 config();
@@ -8,7 +8,7 @@ async function main() {
   await prisma.post.deleteMany();
   await prisma.user.deleteMany();
 
-  const alice = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: "alice@prisma.io" },
     update: {},
     create: {
@@ -23,7 +23,7 @@ async function main() {
       },
     },
   });
-  const bob = await prisma.user.upsert({
+  await prisma.user.upsert({
     where: { email: "bob@prisma.io" },
     update: {},
     create: {
