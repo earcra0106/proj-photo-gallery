@@ -5,6 +5,10 @@
       "persistent": true,
       "cache": false
     },
+    "typecheck": {
+      "dependsOn": ["^build"],
+      "outputs": [".cache/.tsbuildinfo", ".next/types/**"]
+    },
     "lint": {
       "inputs": ["src/**/*.ts", "src/**/*.tsx", "eslint.config.mjs"],
       "cache": false
@@ -13,31 +17,43 @@
       "inputs": ["src/**", "prettier.config.mjs"],
       "cache": false
     },
-    "generate": {
+    "db:generate": {
       "cache": false
     },
-    "seed": {
-      "dependsOn": ["build"],
+    "db:seed": {
       "cache": false
     },
-    "migrate": {
-      "dependsOn": ["build"],
+    "db:migrate": {
       "cache": false
+    },
+    "db:migrate:prod": {
+      "cache": false
+    },
+    "db:studio": {
+      "cache": false,
+      "persistent": true
     },
     "build": {
       "dependsOn": ["^build"],
-      "inputs": ["$TURBO_DEFAULT$"],
-      "outputs": ["dist/**", ".next/**"],
+      "inputs": ["$TURBO_DEFAULT$", ".env*"],
+      "outputs": [
+        "dist/**",
+        ".next/**",
+        "!.next/cache/**",
+        "cache/.tsbuildinfo"
+      ],
       "cache": true
     },
     "start": {
       "dependsOn": ["build"],
+      "persistent": true,
       "cache": false
     },
     "@repo/prisma#build": {
-      "dependsOn": ["@repo/prisma#generate"],
-      "outputs": ["dist/**"],
-      "cache": true
+      "dependsOn": ["@repo/prisma#db:generate"]
+    },
+    "@repo/prisma#db:generate": {
+      "outputs": ["prisma/generated/**"]
     }
   }
 }
