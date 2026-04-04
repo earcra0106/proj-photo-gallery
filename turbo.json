@@ -1,19 +1,28 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "tasks": {
+    "topo": {
+      "dependsOn": ["^topo"],
+      "outputs": []
+    },
     "dev": {
       "persistent": true,
       "cache": false
     },
     "typecheck": {
-      "dependsOn": ["^build"],
+      "dependsOn": ["^topo", "^build"],
       "outputs": [".cache/.tsbuildinfo", ".next/types/**"]
     },
     "lint": {
-      "inputs": ["src/**/*.ts", "src/**/*.tsx", "eslint.config.mjs"],
-      "cache": false
+      "dependsOn": ["^topo", "^build"],
+      "outputs": [".cache/.eslintcache"]
+    },
+    "lint:fix": {
+      "dependsOn": ["^topo", "^build"],
+      "outputs": [".cache/.eslintcache"]
     },
     "format": {
+      "dependsOn": ["^build"],
       "inputs": ["src/**", "prettier.config.mjs"],
       "cache": false
     },
